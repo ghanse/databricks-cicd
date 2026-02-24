@@ -1,0 +1,20 @@
+# The main pipeline for cicd_example
+
+resources:
+  pipelines:
+    cicd_example_etl:
+      name: cicd_example_etl
+      catalog: ${var.catalog}
+      schema: ${var.schema}
+      serverless: true
+      root_path: "../src/cicd_example_etl"
+
+      libraries:
+        - glob:
+            include: ../src/cicd_example_etl/transformations/**
+
+      environment:
+        dependencies:
+          # We include every dependency defined by pyproject.toml by defining an editable environment
+          # that points to the folder where pyproject.toml is deployed.
+          - --editable ${workspace.file_path}
